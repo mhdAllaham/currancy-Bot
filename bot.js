@@ -50,11 +50,21 @@ const CURRENCIES = {
     'EGP': '🇪🇬 جنيه مصري',
     'AED': '🇦🇪 درهم إماراتي',
     'KWD': '🇰🇼 دينار كويتي',
+    'QAR': '🇶🇦 ريال قطري',
+    'OMR': '🇴🇲 ريال عماني',
+    'BHD': '🇧🇭 دينار بحريني',
+    'JOD': '🇯🇴 دينار أردني',
+    'IQD': '🇮🇶 دينار عراقي',
+    'SYP': '🇸🇾 ليرة سورية',
+    'LBP': '🇱🇧 ليرة لبنانية',
+    'DZD': '🇩🇿 دينار جزائري',
+    'MAD': '🇲🇦 درهم مغربي',
+    'TND': '🇹🇳 دينار تونسي',
+    'LYD': '🇱🇾 دينار ليبي',
+    'TRY': '🇹🇷 ليرة تركية',
     'USD': '🇺🇸 دولار أمريكي',
     'EUR': '🇪🇺 يورو',
-    'GBP': '🇬🇧 جنيه إسترليني',
-    'DZD': '🇩🇿 دينار جزائري',
-    'MAD': '🇲🇦 درهم مغربي'
+    'GBP': '🇬🇧 جنيه إسترليني'
 };
 
 const ITEMS_TO_TRACK = ['USD', 'EUR', 'GBP', 'XAU', 'XAG'];
@@ -63,7 +73,12 @@ const currencyKeyboard = {
     inline_keyboard: [
         [{ text: CURRENCIES['SAR'], callback_data: 'curr_SAR' }, { text: CURRENCIES['EGP'], callback_data: 'curr_EGP' }],
         [{ text: CURRENCIES['AED'], callback_data: 'curr_AED' }, { text: CURRENCIES['KWD'], callback_data: 'curr_KWD' }],
-        [{ text: CURRENCIES['DZD'], callback_data: 'curr_DZD' }, { text: CURRENCIES['MAD'], callback_data: 'curr_MAD' }],
+        [{ text: CURRENCIES['QAR'], callback_data: 'curr_QAR' }, { text: CURRENCIES['OMR'], callback_data: 'curr_OMR' }],
+        [{ text: CURRENCIES['BHD'], callback_data: 'curr_BHD' }, { text: CURRENCIES['JOD'], callback_data: 'curr_JOD' }],
+        [{ text: CURRENCIES['IQD'], callback_data: 'curr_IQD' }, { text: CURRENCIES['SYP'], callback_data: 'curr_SYP' }],
+        [{ text: CURRENCIES['LBP'], callback_data: 'curr_LBP' }, { text: CURRENCIES['DZD'], callback_data: 'curr_DZD' }],
+        [{ text: CURRENCIES['MAD'], callback_data: 'curr_MAD' }, { text: CURRENCIES['TND'], callback_data: 'curr_TND' }],
+        [{ text: CURRENCIES['LYD'], callback_data: 'curr_LYD' }, { text: CURRENCIES['TRY'], callback_data: 'curr_TRY' }],
         [{ text: CURRENCIES['USD'], callback_data: 'curr_USD' }, { text: CURRENCIES['EUR'], callback_data: 'curr_EUR' }],
         [{ text: CURRENCIES['GBP'], callback_data: 'curr_GBP' }]
     ]
@@ -126,19 +141,25 @@ async function sendPrices(chatId, userCurrency) {
         });
     }
 
-    let message = `📊 **أحدث الأسعار بـ ${CURRENCIES[userCurrency] || userCurrency}** 📊\n\n`;
-    const formatNumber = (num) => Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    let message = `━━━━━━━━━━━━━━━━━━━━━\n`;
+    message += `🏦 **أسعار الصرف والمعادن**\n`;
+    message += `📍 العملة: **${CURRENCIES[userCurrency] || userCurrency}**\n`;
+    message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-    if (prices['USD'] && userCurrency !== 'USD') message += `🇺🇸 دولار أمريكي (USD): \`${formatNumber(prices['USD'])}\`\n`;
-    if (prices['EUR'] && userCurrency !== 'EUR') message += `🇪🇺 يورو (EUR): \`${formatNumber(prices['EUR'])}\`\n`;
-    if (prices['GBP'] && userCurrency !== 'GBP') message += `🇬🇧 جنيه إسترليني (GBP): \`${formatNumber(prices['GBP'])}\`\n`;
+    const formatNumber = (num) => Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
 
-    message += `\n**المعادن الثمينة (للأونصة):**\n`;
-    if (prices['XAU']) message += `🥇 الذهب (XAU): \`${formatNumber(prices['XAU'])}\`\n`;
-    if (prices['XAG']) message += `🥈 الفضة (XAG): \`${formatNumber(prices['XAG'])}\`\n`;
+    message += `💵 **العملات الأجنبية:**\n`;
+    if (prices['USD'] && userCurrency !== 'USD') message += ` 🇺🇸 دولار أمريكي ➖ \`${formatNumber(prices['USD'])}\`\n`;
+    if (prices['EUR'] && userCurrency !== 'EUR') message += ` 🇪🇺 يورو ➖ \`${formatNumber(prices['EUR'])}\`\n`;
+    if (prices['GBP'] && userCurrency !== 'GBP') message += ` 🇬🇧 جنيه إسترليني ➖ \`${formatNumber(prices['GBP'])}\`\n`;
 
+    message += `\n💎 **المعادن الثمينة (للأونصة):**\n`;
+    if (prices['XAU']) message += ` 🥇 الذهب (XAU) ➖ \`${formatNumber(prices['XAU'])}\`\n`;
+    if (prices['XAG']) message += ` 🥈 الفضة (XAG) ➖ \`${formatNumber(prices['XAG'])}\`\n`;
+
+    message += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
     const d = new Date();
-    message += `\n⏰ آخر تحديث: ${d.toLocaleString('ar-EG', { timeZone: 'Africa/Cairo' })}`;
+    message += `⏱ التحديث: \`${d.toLocaleString('ar-EG', { timeZone: 'Africa/Cairo' })}\`\n`;
 
     bot.editMessageText(message, {
         chat_id: chatId,
