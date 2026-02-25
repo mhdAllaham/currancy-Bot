@@ -11,6 +11,22 @@ if (!token || token === 'your_token_here') {
     process.exit(1);
 }
 
+// -------------------------------------------------------------
+// DUMMY WEB SERVER FOR CLOUD HOSTING (Koyeb, Render, etc.)
+// -------------------------------------------------------------
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.send('Currency Bot is running! 🚀');
+});
+
+app.listen(PORT, () => {
+    console.log(`Web server is listening on port ${PORT}`);
+});
+// -------------------------------------------------------------
+
 const bot = new TelegramBot(token, { polling: true });
 
 const usersFile = path.join(__dirname, 'data', 'users.json');
