@@ -22,12 +22,17 @@ app.get('/', (req, res) => {
     res.send('Currency Bot is running! 🚀');
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Web server is listening on port ${PORT}`);
 });
 // -------------------------------------------------------------
 
 const bot = new TelegramBot(token, { polling: true });
+
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
 
 const usersFile = path.join(__dirname, 'data', 'users.json');
 let users = {};
